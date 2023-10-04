@@ -6,8 +6,7 @@ from .models import User, Product, ProductCategory
 
 @api_view(['POST'])
 def advisor_signup(request):
-    try:
-        
+    try:   
         name = request.data.get('name')
         mobile = request.data.get('mobile')
         if not mobile:
@@ -72,12 +71,11 @@ def user_signup(request):
     try:
         user_name = request.data.get('user_name')
         user_mobile = request.data.get('user_mobile')
-        user_role = 'user'  # Ensure that the role is set to 'user'
+        user_role = 'user' 
 
         if not user_name or not user_mobile:
             return Response({'error': 'User name and mobile number are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if a user with the same mobile number already exists
         if User.objects.filter(mobile=user_mobile).exists():
             return Response({'error': 'A user with this mobile number already exists.'},
                             status=status.HTTP_409_CONFLICT)
@@ -93,8 +91,6 @@ def user_signup(request):
 @api_view(['POST'])
 def add_product(request):
     try:
-        # Validate and add a product here
-        # Example:
         product_name = request.data.get('product_name')
         description = request.data.get('description')
         category = request.data.get('category')
@@ -103,7 +99,6 @@ def add_product(request):
             return Response({'error': 'Product name, description, and category are required.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if the category already exists, if not create it
         existing_category = Product.objects.filter(category=category).first()
         if not existing_category:
             new_category = ProductCategory.objects.create(name=category)
@@ -130,7 +125,7 @@ def purchase_product(request, advisor_id, user_id):
         if not advisor:
             return Response({'error': 'Advisor not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Check if the user (client) exists and is managed by the advisor
+        # Check if the client exists and is managed by the advisor
         user = User.objects.filter(id=user_id, role='user', advisor=advisor).first()
         if not user:
             return Response({'error': 'User not found or not managed by this advisor.'},
