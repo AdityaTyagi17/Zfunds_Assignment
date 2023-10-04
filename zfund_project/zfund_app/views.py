@@ -7,8 +7,7 @@ from .models import User, Product, ProductCategory
 @api_view(['POST'])
 def advisor_signup(request):
     try:
-        # Validate and create an advisor account here
-        # Example:
+        
         name = request.data.get('name')
         mobile = request.data.get('mobile')
         if not mobile:
@@ -17,23 +16,14 @@ def advisor_signup(request):
         # Create the advisor account
         advisor = User.objects.create(name=name, mobile=mobile, role="advisor")
 
-        # Generate and return a token (You can use Django Rest Framework's TokenAuthentication)
-        # token = Token.objects.create(user=advisor)
-
         return Response({'message': 'Advisor account created successfully.'}, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# views.py
-
-# views.py
-
 @api_view(['POST'])
 def add_client(request):
     try:
-        # Validate and create a client linked to an advisor or update the advisor if the client already exists
-        # Example:
         advisor_id = request.data.get('advisor_id')
         client_name = request.data.get('client_name')
         client_mobile = request.data.get('client_mobile')
@@ -63,14 +53,9 @@ def add_client(request):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-# views.py
-
 @api_view(['GET'])
 def list_clients(request, advisor_id):
     try:
-        # List clients for a specific advisor
-        # Example:
         clients = User.objects.filter(advisor_id=advisor_id, role='user')
 
         client_list = [{'name': client.name, 'mobile': client.mobile} for client in clients]
@@ -82,14 +67,9 @@ def list_clients(request, advisor_id):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-# views.py
-
 @api_view(['POST'])
 def user_signup(request):
     try:
-        # Validate and create a user account
-        # Example:
         user_name = request.data.get('user_name')
         user_mobile = request.data.get('user_mobile')
         user_role = 'user'  # Ensure that the role is set to 'user'
@@ -137,14 +117,9 @@ def add_product(request):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-# views.py
-
 @api_view(['POST'])
 def purchase_product(request, advisor_id, user_id):
     try:
-        # Validate and associate an existing product with a specific user (client) by their advisor
-        # Example:
         product_id = request.data.get('product_id')
 
         if not product_id:
@@ -166,7 +141,6 @@ def purchase_product(request, advisor_id, user_id):
         if not product:
             return Response({'error': 'Product not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Associate the product with the user (client)
         user.products=product.name
         user.save()
         return Response({
